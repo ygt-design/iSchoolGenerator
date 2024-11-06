@@ -3,7 +3,7 @@ let angle = 360 / symmetry;
 let t = 0;
 let brandColors;
 let symmetrySlider, colorSpeedSlider, strokeWeightSlider, bgTransparencySlider;
-let widthDivSlider, heightDivSlider, scaleXSlider, scaleYSlider;
+let widthDivSlider, heightDivSlider, scaleXSlider, scaleYSlider, speedDivSlider;
 let controlPanel, animateButton, saveButton, randomTextButton;
 let animating = false;
 let animationSpeed = 0.5;
@@ -39,6 +39,12 @@ function setup() {
   symmetrySlider = createSlider(2, 24, 8, 1);
   createLabelWithSlider("Symmetry", symmetrySlider);
 
+  speedDivSlider = createSlider(0.001, 0.1, 0.001, 0.001);
+  createLabelWithSlider("Speed Slider", speedDivSlider);
+
+  widthDivSlider = createSlider(1, 5, 3, 0.1);
+  createLabelWithSlider("Width Division", widthDivSlider);
+
   colorSpeedSlider = createSlider(0.1, 2, 0.5, 0.1);
   createLabelWithSlider("Color Speed", colorSpeedSlider);
 
@@ -47,12 +53,6 @@ function setup() {
 
   bgTransparencySlider = createSlider(1, 50, 9.5, 0.5);
   createLabelWithSlider("BG Transparency", bgTransparencySlider);
-
-  widthDivSlider = createSlider(1, 5, 3, 0.1);
-  createLabelWithSlider("Width Division", widthDivSlider);
-
-  heightDivSlider = createSlider(1, 5, 3, 0.1);
-  createLabelWithSlider("Height Division", heightDivSlider);
 
   scaleXSlider = createSlider(0.5, 5, 2, 0.1);
   createLabelWithSlider("Scale X", scaleXSlider);
@@ -127,8 +127,12 @@ function draw() {
     widthDivSlider.value(map(sin(time * 8), -1, 1, 1, 5));
     updateSliderValueDisplay(widthDivSlider);
 
-    heightDivSlider.value(map(sin(time * 11), -1, 1, 1, 5));
-    updateSliderValueDisplay(heightDivSlider);
+    widthDivSlider.value(map(sin(time * 11), -1, 1, 1, 5));
+    updateSliderValueDisplay(widthDivSlider);
+
+    speedDivSlider.value(map(sin(time * 6), -1, 1, 0.001, 0.1));
+
+    0.001, 1, 0.001, 0.001;
 
     scaleXSlider.value(map(sin(time * 9), -1, 1, 0.5, 5));
     updateSliderValueDisplay(scaleXSlider);
@@ -143,7 +147,8 @@ function draw() {
   let strokeW = strokeWeightSlider.value();
   let bgTransparency = bgTransparencySlider.value();
   let widthDiv = widthDivSlider.value();
-  let heightDiv = heightDivSlider.value();
+  let heightDiv = widthDivSlider.value();
+  let speedDiv = speedDivSlider.value();
   let scaleX = scaleXSlider.value();
   let scaleY = scaleYSlider.value();
 
@@ -156,7 +161,7 @@ function draw() {
   let x2 = ((noise(t + 0.05) - 0.5) * width) / widthDiv;
   let y2 = ((noise(t + 1000 + 0.05) - 0.5) * height) / heightDiv;
 
-  t += 0.01;
+  t += speedDiv;
 
   let totalColors = brandColors.length;
   let tNorm = (t * colorSpeed) % totalColors;
@@ -180,7 +185,7 @@ function draw() {
     pop();
   }
 
-  if (frameCount > 20000) {
-    noLoop();
-  }
+  // if (frameCount > 20000) {
+  //   noLoop();
+  // }
 }
